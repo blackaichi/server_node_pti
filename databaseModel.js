@@ -4,76 +4,108 @@ var databaseModel = {};
 
 var database = require('./databaseConnection').getdb();
 
-databaseModel.insert=function(json) {
+const error_msg = "error ocurred";
+
+databaseModel.insert = function(json, callback) {
 
 	  console.log("entro insert");
 	  var database = require('./databaseConnection').getdb();
 	  var myobj = { "name": json.body.user, "password": json.body.pass };
 	  console.log(myobj);
 	  database.collection("passwords").insertOne(myobj, function(err, res) {
-	    if (err) return err;
-	    console.log("1 document inserted");
+		if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+	    	console.log("1 document inserted"+JSON.stringify(myobj));
+	    	callback(null, "1 document inserted");
+	    }
 	  });
-	  return null;
 }
 
-databaseModel.find_name=function(names) {
+databaseModel.find_name = function(names, callback) {
 
 	  console.log("entro find");
 	  var database = require('./databaseConnection').getdb();
 	  var myquery = { "name": names };
 	  console.log(myquery);
 	  database.collection("passwords").find(myquery).toArray(function(err, result) {
-	    if (err) return err;
-	    console.log(result);
-	  });
-	  return null;
+	    if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+	    	console.log(result);
+	    	callback(null, result);
+	    } 
+	  });  
 }
 
-databaseModel.show_db=function() {
+databaseModel.show_db = function(callback) {
 
 	  console.log("entro show");
 	  var database = require('./databaseConnection').getdb();
 	  database.collection("passwords").find({}).toArray(function(err, result) {
-	    if (err) return err;
-	    console.log(result);
+	    if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+	    	callback(null, result);
+	    	console.log(result);
+	    }
 	  });
-	  return null;
 }
 
-databaseModel.delete_by_name=function(name) {
+databaseModel.delete_by_name = function(name,callback) {
 
 	  console.log("entro delete");
 	  var database = require('./databaseConnection').getdb();
 	  var myquery = { "name": name };
 	  database.collection("passwords").deleteMany(myquery, function(err, result) {
-	    if (err) return err;
-	    console.log("all document with name: " + name + " deleted");
+	    if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+	    	console.log("all document with name: " + name + " deleted");
+			callback(null, "all document with name: " + name + " deleted");
+	    } 
 	  });
-	  return null;
 }
 
-databaseModel.delete_first=function(name) {
+databaseModel.delete_first = function(name, callback) {
 
 	  console.log("entro delete");
 	  var database = require('./databaseConnection').getdb();
 	  var myquery = { "name": name };
 	  database.collection("passwords").deleteOne(myquery, function(err, result) {
-	    if (err) return err;
-	    console.log("1 document deleted");
+	    if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+	    	console.log("document deleted");
+	    	callback(null, "document deleted");
+	    }
 	  });
-	  return null;
 }
-
-databaseModel.drop_db=function() {
+/*
+databaseModel.drop_db = function(callback) {
 
 	  console.log("entro drop");
 	  var database = require('./databaseConnection').getdb();
 	  database.collection("passwords").remove({}, function(err, result) {
-	    if (err) return err;
-	    console.log("deleted all elements");
+	    if (err) {
+	    	console.log("error", err);
+	    	callback(500, error_msg);
+	    }
+	    else {
+			console.log("deleted all elements");
+	    	callback(null, "deleted all elements");
+	    }
 	  });
-	  return null;
 }
-
+*/
 module.exports = databaseModel;

@@ -4,6 +4,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
+
 //cargar rutas
 var routes = require('./routes');
 
@@ -23,6 +24,6 @@ app.use((req, res, next) => {
 
 //rutas base
 app.use('/', routes);
-
+app.use(express.json());
 
 module.exports = app;
