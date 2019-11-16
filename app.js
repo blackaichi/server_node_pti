@@ -9,7 +9,7 @@ var app = express();
 var routes = require('./routes');
 
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
 //configurar cabeceras http
@@ -24,6 +24,5 @@ app.use((req, res, next) => {
 
 //rutas base
 app.use('/', routes);
-app.use(express.json());
 
 module.exports = app;
