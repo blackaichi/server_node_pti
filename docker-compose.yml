@@ -9,6 +9,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/opt/app
+      - ../apache-tomcat-9.0.5/webapps/webserver:/opt/app/tomcat
       - /opt/app/node_modules
 
   mongo:
